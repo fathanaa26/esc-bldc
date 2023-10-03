@@ -1,52 +1,37 @@
 #include <Arduino.h>
-int count, potVal, pwm_in = 0;
-
+uint32_t count, potVal, pwm_in = 0;
 unsigned long prevMicros = 0;
-
-void changePot(){
-  Serial.println(potVal);
-}
+int u_pin = PA0, v_pin = PA1, w_pin = PA2;
+int pwm_p1 = PA3, pwm_p2 = PA4, pwm_p3 = PA5;
+int pot_pin = PA7;
 
 void setup(){
-  pinMode(PA0, OUTPUT);
-  pinMode(PA1, OUTPUT);
-  pinMode(PA2, OUTPUT);
-  pinMode(PA7, INPUT);
-  attachInterrupt(digitalPinToInterrupt(PA7), changePot, RISING);
+  pinMode(u_pin, OUTPUT);
+  pinMode(v_pin, OUTPUT);
+  pinMode(w_pin, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
+
+  pinMode(pwm_p1, INPUT);
+  pinMode(pwm_p2, INPUT);
+  pinMode(pwm_p3, INPUT);
+
+  pinMode(pot_pin, INPUT);
 
   Serial.begin(115200);
+  
 }
 
 void loop(){
-  potVal = map(analogRead(A7), 0,4095, 0 ,1000000);
-  unsigned long currentMicros = micros();
+  Serial.print("U: ");
+  Serial.println(digitalRead(u_pin));
 
-  if(currentMicros - prevMicros >= potVal){
-    Serial.print("TEST SERIAL ");
-    Serial.println("count");
-    prevMicros = currentMicros;
-    count++;
+  Serial.print("V: ");
+  Serial.println(digitalRead(v_pin));
 
-    if(count == 1){
-      digitalWrite(PA0, HIGH);
-      digitalWrite(PA1, LOW);
-      digitalWrite(PA3, LOW);
-      digitalWrite(PC13, LOW);
-    }else if(count == 2){
-      digitalWrite(PA0, LOW);
-      digitalWrite(PA1, HIGH);
-      digitalWrite(PA3, LOW);
-      digitalWrite(PC13, LOW);
-    }else if(count == 3){
-      digitalWrite(PA0, LOW);
-      digitalWrite(PA1, LOW);
-      digitalWrite(PA3, HIGH);
-      digitalWrite(PC13, LOW);
-    }else{
-      count = 1;
-      digitalWrite(PA0, HIGH);
-      digitalWrite(PC13, HIGH);
-    }
-  }
+  Serial.print("W: ");
+  Serial.println(digitalRead(w_pin));
+
+  delay(1000);
+
 }
 
