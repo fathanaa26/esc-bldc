@@ -24,6 +24,9 @@
 #define pwm_in_1 PA1
 #define pwm_in_2 PA2
 #define pwm_in_3 PA3
+#define pot_pin PA7
+
+uint32_t potVal = 0;
 
 void Update_IT_callback(void)
 { // Update event correspond to Rising edge of PWM when configured in PWM1 mode
@@ -60,8 +63,8 @@ void setup()
 
   MyTim->setMode(channel, TIMER_OUTPUT_COMPARE_PWM1, pin);
   // MyTim->setPrescaleFactor(8); // Due to setOverflow with MICROSEC_FORMAT, prescaler will be computed automatically based on timer input clock
-  MyTim->setOverflow(80, HERTZ_FORMAT); // 100000 microseconds = 100 milliseconds
-  MyTim->setCaptureCompare(channel, 50, PERCENT_COMPARE_FORMAT); // 50%
+  MyTim->setOverflow(1, HERTZ_FORMAT); // 100000 microseconds = 100 milliseconds
+  MyTim->setCaptureCompare(channel, 30, PERCENT_COMPARE_FORMAT); // 50%
   MyTim->attachInterrupt(Update_IT_callback);
   MyTim->attachInterrupt(channel, Compare_IT_callback);
   MyTim->resume();
