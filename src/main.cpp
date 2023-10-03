@@ -9,7 +9,6 @@ void setup(){
   pinMode(u_pin, OUTPUT);
   pinMode(v_pin, OUTPUT);
   pinMode(w_pin, OUTPUT);
-  pinMode(LED_BUILTIN, OUTPUT);
 
   pinMode(pwm_p1, INPUT);
   pinMode(pwm_p2, INPUT);
@@ -22,16 +21,26 @@ void setup(){
 }
 
 void loop(){
+  analogReadResolution(12);
+  
+
   Serial.print("U: ");
-  Serial.println(digitalRead(u_pin));
+  Serial.print(analogRead(u_pin));
+  Serial.print(" V: ");
+  Serial.println(analogRead(u_pin) * 3300 / 4095);
 
   Serial.print("V: ");
-  Serial.println(digitalRead(v_pin));
+  Serial.print(analogRead(v_pin));
+  Serial.print(" V: ");
+  Serial.println(analogRead(v_pin) * 3300 / 4095);
 
   Serial.print("W: ");
-  Serial.println(digitalRead(w_pin));
+  Serial.print(analogRead(w_pin));
+  Serial.print(" V: ");
+  Serial.println(analogRead(w_pin) * 3300 / 4095);
 
-  delay(1000);
+  Serial.println();
+  delay(400);
 
 }
 
