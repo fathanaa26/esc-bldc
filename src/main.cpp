@@ -41,8 +41,7 @@ void loop(){
 
     if(he_V[i] > sensorTrigerVal){
       he_bin[i] = 1;
-    }
-    if(he_V[i] < sensorTrigerVal){
+    }else{
       he_bin[i] = 0;
     }
 
@@ -54,7 +53,7 @@ void loop(){
   
 
   Serial.println();
-  delay(1000);
+  delay(10);
 
 }
 
