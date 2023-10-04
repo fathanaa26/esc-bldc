@@ -1,8 +1,9 @@
 // format Serial
-// u, v, w
+// u, v, w, v_u, v_v, v_w, pot_val
 // u = HIGH/LOW
 // v = HIGH/LOW
 // w = HIGH/LOW
+// v_x = adc voltage
 
 #include <Arduino.h>
 uint32_t count, potVal, pwm_in = 0;
@@ -10,6 +11,8 @@ unsigned long prevMicros = 0;
 
 int pwm_p1 = PA3, pwm_p2 = PA4, pwm_p3 = PA5;
 int pot_pin = PA7;
+
+int pot_val;
 
 int he_pin[3] = {PA0, PA1, PA2};
 
@@ -35,6 +38,7 @@ void setup(){
 
 void loop(){
   analogReadResolution(12);
+  pot_val = map(analogRead(pot_pin), 0, 4095, 10, 1000);
   
   for(int i = 0; i < 3; i++){
     he_V[i] = float(analogRead(he_pin[i]) * 3300.0 / 4095.0);
@@ -45,15 +49,23 @@ void loop(){
       he_bin[i] = 0;
     }
 
-    Serial.print(he_bin[i]);
-    Serial.print(", ");
-
   }
 
-  
+  for(int i = 0; i < 3; i++){
+    Serial.print(he_bin[i]);
+    Serial.print(", ");
+  }
 
+  for(int i = 0; i < 3; i++){
+    Serial.print(he_V[i]);
+    Serial.print(", ");
+  }
+
+  Serial.print(pot_val);
+  Serial.print(", ");
+  
   Serial.println();
-  delay(10);
+  delay(pot_val);
 
 }
 
