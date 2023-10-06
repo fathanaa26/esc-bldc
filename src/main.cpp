@@ -23,7 +23,7 @@ float sensorTrigerVal = 200.0;
 // StaticJsonDocument<50> doc;
 
 
-byte fase;
+byte fase = 1;
 
 
 void setup(){
@@ -47,37 +47,50 @@ void setup(){
 }
 
 void fase_1(){
-  if((he_bin[0] && he_bin[2] == 1) && (he_bin[1] == 0)){ // U=1, V=0 , W=1
-    digitalWrite(pwm_p0, HIGH); // coil_u HIGH
-    digitalWrite(pwm_p1, LOW); // coil_v LOW
+  // U=1, V=0 , W=1
+  if(((he_bin[0] && he_bin[2] == 1) && (he_bin[1] == 0)) && fase == 6){ 
+    fase = 1;
+    Serial.println(">> FASE 1");
   }
 }
 
 void fase_2(){
-  if((he_bin[0] && he_bin[1] == 0) && (he_bin[2] == 1)){ // U=0, V=0 , W=1
-    digitalWrite(pwm_p2, HIGH); // coil_w HIGH
-    digitalWrite(pwm_p1, LOW); // coil_v LOW
+  // U=0, V=0 , W=1
+  if(((he_bin[0] && he_bin[1] == 0) && (he_bin[2] == 1)) && fase == 1){
+    fase = 2; 
+    Serial.println(">> FASE 2");
   }
 }
 
 void fase_3(){
-  if((he_bin[0] == 1) && (he_bin[1] == 1  && he_bin[2] == 1)){ // U=0, V=1 , W=1
-    digitalWrite(pwm_p0, LOW); // coil_v LOW
-    digitalWrite(pwm_p2, HIGH); // coil_w HIGH
+  // U=0, V=1 , W=1
+  if(((he_bin[1] && he_bin[2] == 1) && (he_bin[0] == 0)) && fase == 2){ // U=0, V=1 , W=1
+    fase = 3;
+    Serial.println(">> FASE 3");
   }
 }
 
 void fase_4(){
-  if((he_bin[0] && he_bin[2] == 0) && (he_bin[1] == 1)){ // U=0, V=1, W=0
-    digitalWrite(pwm_p1, HIGH); // coil_v HIGH
-    digitalWrite(pwm_p0, LOW);// coil_u LOW
+  // U=0, V=1, W=0
+  if(((he_bin[0] && he_bin[2] == 0) && (he_bin[1] == 1)) && fase == 3){ 
+    fase = 4;
+    Serial.println(">> FASE 4");
   } 
 }
 
 void fase_5(){
-  if((he_bin[0] && he_bin[2] == 0) && (he_bin[] == 1)){ // U=0, V=1, W=0
-    digitalWrite(pwm_p1, HIGH); // coil_v HIGH
-    digitalWrite(pwm_p0, HIGH);// coil_u LOW
+  // U=1, V=1, W=0
+  if(((he_bin[0] && he_bin[1] == 1) && (he_bin[2] == 0)) && fase == 4){ 
+    fase = 5;
+    Serial.println(">> FASE 5");
+  } 
+}
+
+void fase_6(){
+  // U=1, V=0, W=0
+  if(((he_bin[1] && he_bin[2] == 0) && (he_bin[0] == 1)) && fase == 5){
+    fase = 6; 
+    Serial.println(">> FASE 6");
   } 
 }
 
@@ -95,6 +108,32 @@ void loop(){
     }else{
       he_bin[i] = 0;
     }
+  }
+
+  switch (fase)
+  {
+  case 1:
+    fase_1();
+    break;
+  case 2:
+    fase_2();
+    break;
+  case 3:
+    fase_3();
+    break;
+  case 4:
+    fase_4();
+    break;
+  case 5:
+    fase_5();
+    break;
+  case 6:
+    fase_6();
+    break;
+  
+  default:
+    Serial.println("switch not wotking");
+    break;
   }
 
   for(int i = 0; i < 3; i++){
@@ -117,6 +156,7 @@ void loop(){
     Serial.print(pot_val);
     Serial.print(", ");
   }
+
  
   Serial.println();
 
